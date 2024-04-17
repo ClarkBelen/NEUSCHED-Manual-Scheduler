@@ -1,0 +1,106 @@
+* {
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+      'Helvetica Neue', sans-serif;
+}
+
+body, html {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(59, 153, 198);
+    font-size: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+.container-fluid {
+    padding: 20px;
+}
+
+#header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#header img {
+    width: 70px;
+    height: auto;
+    margin-right: 10px;
+}
+
+#header h1 {
+    font-family: 'Nocture Serif';
+    font-size: 30px;
+}
+
+.form-box {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+#collect form input {
+    font-size: 15px;
+    padding: 0.2rem 1rem;
+}
+
+button {
+    width: auto;
+    border: 1px solid #0096FF;
+    color: white;
+    background: #0096FF;
+    padding: 0.8rem 1.2rem;
+    cursor: pointer;
+    border-radius: 0.4rem;
+    transition: background-color 0.3s ease;
+    vertical-align: middle;
+    font-size: 1rem;
+}
+
+.form-inline button {
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-bottom: 20px;
+}
+
+.edit-btn,
+.delete-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+
+#display > div {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#display table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+th,
+td {
+    text-align: center;
+    padding: 0.25rem 1rem;
+    border: 1px solid #ccc;
+}
+
+tbody > tr:nth-child(odd) {
+    background-color: #eee;
+}
+
+@media (min-width: 768px) {
+    .form-box {
+        padding: 40px;
+    }
+}
+

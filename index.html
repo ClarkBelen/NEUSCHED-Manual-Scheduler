@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="assets/icon.png">
+    <title>NEUSCHED</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/app.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-box">
+                    <div id="header">
+                        <img src="./assets/New_Era_University.png" alt="Logo">
+                        <h1>NEUSCHED</h1>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div id="collect">
+                                <form class="form-horizontal" id="manual-form">
+                                    <div class="form-group">
+                                        <!-- Text -->
+                                        <label for="sCode" class="control-label col-md-3">Subject Code</label> 
+                                        <div class="col-md-9">
+                                            <input class="form-control" type="text" id="sCode" name="sCode" value="" placeholder="Optional" />
+                                        </div>
+                                    </div>
+                                        
+                                    <div class="form-group">
+                                        <!-- Text -->
+                                        <label for="sName" class="control-label col-md-3">Subject Name</label>
+                                        <div class="col-md-9">
+                                            <input class="form-control" type="text" id="sName" name="sName" value="" placeholder="Required" required/>
+                                        </div>
+                                    </div>
+                                          
+                                    <div class="form-group">
+                                        <!-- ["SUN", "M", "T", "W", "TH", "F", "SAT"] (Checklist - Can have one or multiple days per sub) -->
+                                        <!-- Have a plus button for additional set of schedule day with start time and end time per sub -->
+                                        <label for="schedDay" class="control-label col-md-3">Schedule Day</label>
+                                        <div class="col-md-9" id="schedDays">
+                                                <label class="checkbox-inline"><input type="checkbox" id="schedDay" name="schedDay"/>SUN</label>
+                                                <label class="checkbox-inline"><input type="checkbox" id="schedDay" name="schedDay"/>M</label>
+                                                <label class="checkbox-inline"><input type="checkbox" id="schedDay" name="schedDay"/>T</label>
+                                                <label class="checkbox-inline"><input type="checkbox" id="schedDay" name="schedDay"/>W</label>
+                                                <label class="checkbox-inline"><input type="checkbox" id="schedDay" name="schedDay"/>TH</label>
+                                                <label class="checkbox-inline"><input type="checkbox" id="schedDay" name="schedDay"/>F</label>
+                                                <label class="checkbox-inline"><input type="checkbox" id="schedDay" name="schedDay"/>SAT</label>
+                                        </div>   
+                                    </div>
+                                        
+                                    <div class="form-group">
+                                        <label for="startTime" class="control-label col-md-3">Start Time</label>
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="time" id="startTime" name="startTime" placeholder="Required" required/>
+                                        </div>
+                                        <label for="endTime" class="control-label col-md-1">End Time</label>
+                                        <div class="col-md-4">
+                                            <input class="form-control" type="time" id="endTime" name="endTime" placeholder="Required" required/>
+                                        </div>
+                                    </div>
+                
+                                    <div class="form-group">
+                                        <!-- Text (SCROLLABLE FROM TABLE) -->
+                                        <label for="description" class="control-label col-md-3">Description</label> 
+                                        <div class="col-md-9">
+                                            <textarea class="form-control" id="description" name="description" placeholder="Optional" rows="5"></textarea>
+                                        </div>
+                                    </div>
+                                
+                                    <div class="form-group">
+                                        <!-- Text -->
+                                        <label for="location" class="control-label col-md-3">Location</label>
+                                        <div class="col-md-9">
+                                            <input class="form-control" type="text" id="location" name="location" value="" placeholder="Optional" />
+                                        </div>
+                                    </div>
+                                
+                                    <div class="form-group">
+                                        <label for="isPrivate" class="control-label col-md-3">Private Event</label>
+                                        <div class="col-md-9">
+                                            <div class="radio-inline">
+                                                <input class="form-check-input" type="radio" name="isPrivate" id="privateYes" value="TRUE" checked>
+                                                <label class="form-check-label" for="privateYes">True</label>
+                                            </div>
+                                            <div class="radio-inline">
+                                                <input class="form-check-input" type="radio" name="isPrivate" id="privateNo" value="FALSE">
+                                                <label class="form-check-label" for="privateNo">False</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="form-inline col-md-offset-8">
+                                        <button class="btn btn-primary" id="btnSave">Save</button>
+                                        <button class="btn btn-info" id="btnCancel">Clear</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div id="display">
+                                <!-- Table should be fixed in size or width (bootstrap) -->
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Subject Code</th>
+                                            <th>Subject Name</th>
+                                            <th>Day</th>
+                                            <th>Start Time</th>
+                                            <th>End Time</th>
+                                            <th>Description</th>
+                                            <th>Location</th>
+                                            <th>Private</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Table data will be dynamically filled here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
