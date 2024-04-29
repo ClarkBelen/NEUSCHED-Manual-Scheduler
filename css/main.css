@@ -35,12 +35,14 @@ body, html {
 }
 
 .form-box {
-    max-width: 100%;
+    overflow:auto;
+    flex-wrap: wrap;
+    max-width: 500%;
     margin: 0 auto;
-    padding: 20px;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    
 }
 
 #collect form input {
@@ -81,26 +83,68 @@ button {
     text-align: center;
 }
 
-#display table {
+table{
     width: 100%;
+    max-width: 100%;
+    overflow-wrap:normal;
     border-collapse: collapse;
-    border: 1px solid #ccc;
 }
 
 th,
 td {
     text-align: center;
-    padding: 0.25rem 1rem;
+    padding: 8px;
     border: 1px solid #ccc;
 }
 
-tbody > tr:nth-child(odd) {
+tbody{
     background-color: #eee;
 }
 
-@media (min-width: 768px) {
+
+@media (min-width: 800px) {
     .form-box {
-        padding: 40px;
+        padding: 30px;
     }
 }
+.table-wrapper {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    overflow: auto;
+    white-space: normal;
+}
+
+.weekDays-selector input {
+    display: none!important;
+  }
+  
+  .weekDays-selector input[type=checkbox] + label {
+    display: inline-block;
+    border-radius: 6px;
+    background: #ced5d67a;
+    height: 30px;
+    width: 40px;
+    margin-right: 4px;
+    margin-left: 3px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .weekDays-selector input[type=checkbox]:checked + label {
+    background: #0077ff;
+    color: #ffffff;
+  }
+  .weekDays-selector input[type=checkbox]:checked:hover + label {
+    background: #0059ff;
+    color: #ffffff;
+  }
+  .weekDays-selector input[type=checkbox]:hover + label {
+    background: rgba(0, 170, 255, 0.238);
+    color: hsl(0, 0%, 2%);
+  }
+  .weekDays-selector label {
+    font-size: 14px;
+    font-weight:normal;
+  }
 

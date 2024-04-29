@@ -13,6 +13,7 @@ function convertTo12HourFormat(time) {
 
   return `${hours}:${minutes} ${period}`;
 }
+let row;
 const APP = {
   data: [],
   init() {
@@ -24,19 +25,17 @@ const APP = {
 
     document.querySelector('#btnCancel').addEventListener('click', APP.clearInputField);
 
-    // document
-    //   .querySelector('table tbody')
-    //   .addEventListener('dblclick', APP.editCell);
-
     document.querySelector('table tbody').addEventListener('click', (ev) => {
-      const rowIndex = +ev.target.closest('tr').getAttribute('data-row');
-      if (APP.isEditing) {
-        alert("You are editing a row. Please save it first!");
+      const rowIndex = ev.target.closest('tr').getAttribute('data-row');
+      row = rowIndex;
+      if (APP.isEditing && (ev.target.id === 'edit' || ev.target.id === 'delete')) {
+        alert("You are currently editing a schedule row. Please save it first!");
+        document.getElementById('sCode').focus();
         return; // Prevent form submission
       } else {
-        if (ev.target.classList.contains('edit-btn')) {
+        if (ev.target.classList.contains('btn-info')||ev.target.classList.contains('glyphicon-edit')) {
           APP.editRow(rowIndex);
-        } else if (ev.target.classList.contains('delete-btn')) {
+        } else if (ev.target.classList.contains('btn-danger')||ev.target.classList.contains('glyphicon-trash')) {
           APP.deleteRow(rowIndex);
         }
       }  
@@ -47,7 +46,13 @@ const APP = {
       .addEventListener('click', APP.exportData);
   },
   clearInputField() {
-    document.getElementById('manual-form').reset();
+    if(APP.isEditing){
+        APP.isEditing = false; // Reset the flag
+        document.querySelector(`tbody tr[data-row="${row}"]`).classList.remove('bg-info');
+        document.getElementById('manual-form').reset();
+    }else{
+        document.getElementById('manual-form').reset();
+    }
   },
   saveData(ev) {
     ev.preventDefault();
@@ -64,6 +69,8 @@ const APP = {
     // Check if at least one checkbox is checked
     const checkboxes = document.querySelectorAll('#schedDays input[type="checkbox"]');
     const isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+    console.log(checkboxes.values());
+
     if (!isChecked) {
         alert('Please select at least one schedule day.');
         return;
@@ -81,8 +88,9 @@ const APP = {
     // Extract the value of the checked days
     const checkedDays = Array.from(checkboxes)
         .filter(checkbox => checkbox.checked)
-        .map(checkbox => checkbox.nextSibling.textContent.trim())
+        .map(checkbox => checkbox.nextElementSibling.textContent.trim())
         .join(',');
+
 
     // Update the formdata with the checked days
     formdata.set('schedDay', checkedDays);
@@ -100,7 +108,7 @@ const APP = {
 
     //clear the form
     form.reset();
-    //focus on first name
+    //focus on first field
     document.getElementById('sCode').focus();
   },
   cacheData(formdata) {
@@ -123,7 +131,8 @@ const APP = {
     col++;
     }
      // Add edit and delete buttons
-    tr.innerHTML += `<td><button class="edit-btn"><span class="glyphicon glyphicon-edit"></span></button></td><td><button class="delete-btn"><span class="glyphicon glyphicon-trash"></span></button></td>`;
+    tr.innerHTML += `<td><span class="glyphicon glyphicon-edit btn btn-info btn-sm" style="margin:2px;" id="edit" data-toggle="tooltip" data-placement="top" title="Edit"></span>
+    <span class="glyphicon glyphicon-trash btn btn-danger btn-sm" id="delete" data-toggle="tooltip" data-placement="top" title="Delete"></span></td>`;
     tbody.append(tr);
     },
   
@@ -133,7 +142,7 @@ const APP = {
     const row = document.querySelector(`tbody tr[data-row="${rowIndex}"]`);
     const data = APP.data[rowIndex];
    
-    row.classList.add('info');
+    row.classList.add('bg-info');
 
     // Populate the form with the row data
     document.getElementById('sCode').value = data[0];
@@ -142,7 +151,7 @@ const APP = {
     // Handle checkboxes
     const days = data[2].split(','); // Assuming the days are stored as a comma-separated string
     document.querySelectorAll('#schedDays input[type="checkbox"]').forEach(checkbox => {
-       checkbox.checked = days.includes(checkbox.nextSibling.textContent.trim());
+       checkbox.checked = days.includes(checkbox.nextElementSibling.textContent.trim());
     });
    
     // Handle other inputs similarly
@@ -152,10 +161,13 @@ const APP = {
     document.getElementById('location').value = data[6];
    
     // Set the private event radio button
-    const isPrivate = data[7] === 'true';
-    document.getElementById('privateYes').checked = isPrivate;
-    document.getElementById('privateNo').checked = !isPrivate;
-  
+
+    if(data[7] === 'TRUE'){
+      document.getElementById('privateYes').checked = true;
+    }else{
+      document.getElementById('privateNo').checked = true;
+    }
+    document.getElementById('sCode').focus();
   },
   updateRow(formdata, rowIndex) {
      // Update the existing row in APP.data
@@ -172,9 +184,10 @@ const APP = {
     col++;
      }
      // Add edit and delete buttons
-     row.innerHTML += `<td><button class="edit-btn"><span class="glyphicon glyphicon-edit"></span></button></td><td><button class="delete-btn"><span class="glyphicon glyphicon-trash"></span></button></td>`;
+     row.innerHTML +=  `<td><span class="glyphicon glyphicon-edit btn btn-info btn-sm" style="margin:2px;" id="edit" data-toggle="tooltip" data-placement="top" title="Edit"></span>
+     <span class="glyphicon glyphicon-trash btn btn-danger btn-sm" id="delete" data-toggle="tooltip" data-placement="top" title="Delete"></span></td>`;
 
-     document.querySelector(`tbody tr[data-row="${rowIndex}"]`).classList.remove('info');
+     document.querySelector(`tbody tr[data-row="${rowIndex}"]`).classList.remove('bg-info');
   },
   deleteRow(rowIndex) {
     const tbody = document.querySelector('#display > table > tbody');
