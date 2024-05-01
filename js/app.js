@@ -18,18 +18,22 @@ function convertTo12HourFormat(time) {
 function getUrlParameter(name) {
   const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
   const results = regex.exec(window.location.search);
+  console.log(results);
   return results === null? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 }
 
 // Get the data string from the URL parameters
 const dataString = getUrlParameter('data');
+console.log(dataString);
 
 // Assuming dataString is a valid JSON string representing the parsed schedule data
 try {
   const parsedData = JSON.parse(dataString);
+  console.log(parsedData);
 
   // Clear the current table content
   const tbody = document.querySelector('#display > table > tbody');
+  console.log(tbody);
   if (tbody) { // Check if tbody is not null before setting innerHTML
     tbody.innerHTML = '';
   }
