@@ -133,10 +133,12 @@ const APP = {
         if (ev.target.classList.contains('btn-info') || ev.target.classList.contains('glyphicon-edit')) {
           // Handle edit button click
           const rowIndex = ev.target.closest('tr').getAttribute('data-row');
+          row = rowIndex;
           APP.editRow(rowIndex);
        } else if (ev.target.classList.contains('btn-danger') || ev.target.classList.contains('glyphicon-trash')) {
           // Handle delete button click
           const rowIndex = ev.target.closest('tr').getAttribute('data-row');
+          row = rowIndex;
           APP.deleteRow(rowIndex);
        }
       }
