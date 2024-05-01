@@ -1,4 +1,37 @@
-function convertTo12HourFormat(time) {
+function getScheduleDataFromURL() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const encodedData = urlParams.get('data');
+  if (encodedData) {
+     return JSON.parse(atob(encodedData));
+  }
+  return null;
+ }
+
+ function populateAndSubmitForm(scheduleData) {
+  // Assuming scheduleData is an array of objects
+  scheduleData.forEach(data => {
+     // Populate form fields based on the data structure
+     document.getElementById('sCode').value = data.subjectCode;
+     document.getElementById('sName').value = data.subjectName;
+     // Assuming 'schedule' is in the format 'Day StartTime-EndTime'
+     const [day, time] = data.schedule.split(' ');
+     const [startTime, endTime] = time.split('-');
+     // Convert to 24-hour format if necessary
+     document.getElementById('startTime').value = convertTo24HourFormat(startTime);
+     document.getElementById('endTime').value = convertTo24HourFormat(endTime);
+     document.getElementById('location').value = data.sectionRoom;
+     // Set private based on lecLabUnits
+     if (data.lecLabUnits.split('/')[0] !== '0.0') {
+       document.getElementById('privateYes').checked = true;
+     } else {
+       document.getElementById('privateNo').checked = true;
+     }
+     // Submit the form
+     document.getElementById('manual-form').dispatchEvent(new Event('submit'));
+  });
+ }
+ 
+ function convertTo12HourFormat(time) {
   let [hours, minutes] = time.split(':');
   let period = 'AM';
 
@@ -13,45 +46,17 @@ function convertTo12HourFormat(time) {
 
   return `${hours}:${minutes} ${period}`;
 }
-
-// Function to get URL parameters
-function getUrlParameter(name) {
-  const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-  let results = regex.exec(window.location.search);
-  console.log(results);
-  return results === null? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-}
-
-// Get the data string from the URL parameters
-let dataString = getUrlParameter('data');
-console.log(dataString);
-
-// Assuming dataString is a valid JSON string representing the parsed schedule data
-try {
-  let parsedData = JSON.parse(dataString);
-  console.log(parsedData);
-
-  // Clear the current table content
-  let tbody = document.querySelector('#display > table > tbody');
-  console.log(tbody);
-  if (tbody) { // Check if tbody is not null before setting innerHTML
-    tbody.innerHTML = '';
+ 
+ 
+ // Call this function when the page loads
+ document.addEventListener('DOMContentLoaded', () => {
+  const scheduleData = getScheduleDataFromURL();
+  if (scheduleData) {
+     populateAndSubmitForm(scheduleData);
   }
+ });
 
-  // Populate the table with the parsed data
-  parsedData.forEach(item => {
-    const tr = document.createElement('tr');
-    Object.keys(item).forEach(key => {
-      const td = document.createElement('td');
-      td.innerText = item[key];
-      tr.appendChild(td);
-    });
-    tbody.appendChild(tr);
-    console.log(tbody);
-  });
-} catch (error) {
-  console.error('Error parsing data:', error);
-}
+
 
 let row;
 const APP = {
