@@ -37,6 +37,9 @@ function getScheduleDataFromURL() {
 
      // Add the row to the table using the new function
      addScheduleRow(rowData);
+     
+     // Add the row data to APP.data
+    APP.data.push(rowData);
   });
  }
  function addScheduleRow(scheduleData) {
@@ -49,7 +52,7 @@ function getScheduleDataFromURL() {
   row.insertCell(2).textContent = scheduleData.schedDay;
   row.insertCell(3).textContent = convertTo12HourFormat(scheduleData.startTime);
   row.insertCell(4).textContent = convertTo12HourFormat(scheduleData.endTime);
-  row.insertCell(5).textContent = scheduleData.subjectName + ' Class'; // Description column should be empty
+  row.insertCell(5).textContent = scheduleData.description; // Description column should be empty
   row.insertCell(6).textContent = scheduleData.location;
   row.insertCell(7).textContent = scheduleData.private;
  
