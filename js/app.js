@@ -13,6 +13,38 @@ function convertTo12HourFormat(time) {
 
   return `${hours}:${minutes} ${period}`;
 }
+
+// Example function to get URL parameters
+function getUrlParameter(name) {
+  const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+  const results = regex.exec(window.location.search);
+  return results === null? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+
+// Get the data string from the URL parameters
+const dataString = getUrlParameter('data');
+// Assuming dataString is a valid JSON string representing the parsed schedule data
+try {
+  const parsedData = JSON.parse(dataString);
+
+  // Clear the current table content
+  const tbody = document.querySelector('#display > table > tbody');
+  tbody.innerHTML = '';
+
+  // Populate the table with the parsed data
+  parsedData.forEach(item => {
+    const tr = document.createElement('tr');
+    Object.keys(item).forEach(key => {
+      const td = document.createElement('td');
+      td.innerText = item[key];
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+} catch (error) {
+  console.error('Error parsing data:', error);
+}
+
 let row;
 const APP = {
   data: [],
