@@ -37,9 +37,12 @@ function getScheduleDataFromURL() {
 
      // Add the row to the table using the new function
      addScheduleRow(rowData);
-     
-     // Add the row data to APP.data
-    APP.data.push(rowData);
+
+      // Cache the data in APP.data
+    APP.cacheData(new FormData(rowData));
+
+    // Build the row in the table
+    APP.buildRow(new FormData(rowData));
   });
  }
  function addScheduleRow(scheduleData) {
