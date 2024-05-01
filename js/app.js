@@ -10,26 +10,43 @@ function getScheduleDataFromURL() {
  function populateAndSubmitForm(scheduleData) {
   // Assuming scheduleData is an array of objects
   scheduleData.forEach(data => {
-     // Populate form fields based on the data structure
-     document.getElementById('sCode').value = data.subjectCode;
-     document.getElementById('sName').value = data.subjectName;
-     // Assuming 'schedule' is in the format 'Day StartTime-EndTime'
-     const [day, time] = data.schedule.split(' ');
-     const [startTime, endTime] = time.split('-');
-     // Convert to 24-hour format if necessary
-     document.getElementById('startTime').value = convertTo24HourFormat(startTime);
-     document.getElementById('endTime').value = convertTo24HourFormat(endTime);
-     document.getElementById('location').value = data.sectionRoom;
-     // Set private based on lecLabUnits
-     if (data.lecLabUnits.split('/')[0] !== '0.0') {
-       document.getElementById('privateYes').checked = true;
-     } else {
-       document.getElementById('privateNo').checked = true;
-     }
-     // Submit the form
-     document.getElementById('manual-form').dispatchEvent(new Event('submit'));
+     // Prepare the data for the table row
+    const rowData = {
+      subjectCode: data.subjectCode,
+      subjectName: data.subjectName,
+      schedDay: data.schedule.split(' ')[0], // Assuming 'schedule' is in the format 'Day StartTime-EndTime'
+      startTime: convertTo24HourFormat(data.schedule.split(' ')[1].split('-')[0]),
+      endTime: convertTo24HourFormat(data.schedule.split(' ')[1].split('-')[1]),
+      location: data.sectionRoom,
+      private: data.lecLabUnits.split('/')[0] !== '0.0' ? 'TRUE' : 'FALSE'
+    };
+
+    // Directly add the row to the table
+    automaticBuildRow(rowData);
   });
  }
+ automaticBuildRow = function(data) {
+  const tbody = document.querySelector('#display > table > tbody');
+  const tr = document.createElement('tr');
+  tr.setAttribute('data-row', document.querySelectorAll('tbody tr').length);
+ 
+  // Assuming the order of data properties matches the order of columns in the table
+  Object.values(data).forEach((value, index) => {
+     const td = document.createElement('td');
+     td.setAttribute('data-col', index);
+     td.textContent = value;
+     tr.appendChild(td);
+  });
+ 
+  // Add edit and delete buttons
+  const actionCell = document.createElement('td');
+  actionCell.innerHTML = `<span class="glyphicon glyphicon-edit btn btn-info btn-sm" style="margin:2px;" id="edit" data-toggle="tooltip" data-placement="top" title="Edit"></span>
+  <span class="glyphicon glyphicon-trash btn btn-danger btn-sm" id="delete" data-toggle="tooltip" data-placement="top" title="Delete"></span>`;
+  tr.appendChild(actionCell);
+ 
+  tbody.appendChild(tr);
+ };
+ 
  
  // Convert time to 24-hour format if necessary
  function convertTo24HourFormat(time) {
