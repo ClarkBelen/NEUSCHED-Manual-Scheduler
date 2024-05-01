@@ -17,8 +17,8 @@ function getScheduleDataFromURL() {
      const [day, time] = data.schedule.split(' ');
      const [startTime, endTime] = time.split('-');
      // Convert to 24-hour format if necessary
-     document.getElementById('startTime').value = convertTo24HourFormat(startTime);
-     document.getElementById('endTime').value = convertTo24HourFormat(endTime);
+     document.getElementById('startTime').value = startTime;
+     document.getElementById('endTime').value = endTime;
      document.getElementById('location').value = data.sectionRoom;
      // Set private based on lecLabUnits
      if (data.lecLabUnits.split('/')[0] !== '0.0') {
@@ -31,7 +31,17 @@ function getScheduleDataFromURL() {
   });
  }
  
- function convertTo12HourFormat(time) {
+
+ 
+ // Call this function when the page loads
+ document.addEventListener('DOMContentLoaded', () => {
+  const scheduleData = getScheduleDataFromURL();
+  if (scheduleData) {
+     populateAndSubmitForm(scheduleData);
+  }
+ });
+
+function convertTo12HourFormat(time) {
   let [hours, minutes] = time.split(':');
   let period = 'AM';
 
@@ -46,17 +56,6 @@ function getScheduleDataFromURL() {
 
   return `${hours}:${minutes} ${period}`;
 }
- 
- 
- // Call this function when the page loads
- document.addEventListener('DOMContentLoaded', () => {
-  const scheduleData = getScheduleDataFromURL();
-  if (scheduleData) {
-     populateAndSubmitForm(scheduleData);
-  }
- });
-
-
 
 let row;
 const APP = {
