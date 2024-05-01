@@ -17,8 +17,8 @@ function getScheduleDataFromURL() {
      const [day, time] = data.schedule.split(' ');
      const [startTime, endTime] = time.split('-');
      // Convert to 24-hour format if necessary
-     document.getElementById('startTime').value = startTime;
-     document.getElementById('endTime').value = endTime;
+     document.getElementById('startTime').value = convertTo24HourFormat(startTime);
+     document.getElementById('endTime').value = convertTo24HourFormat(endTime);
      document.getElementById('location').value = data.sectionRoom;
      // Set private based on lecLabUnits
      if (data.lecLabUnits.split('/')[0] !== '0.0') {
@@ -31,7 +31,44 @@ function getScheduleDataFromURL() {
   });
  }
  
-
+ // Convert time to 24-hour format if necessary
+ function convertTo24HourFormat(time) {
+    // Regular expression to match time formats
+    // This regex matches:
+    // - HH:MM AM/PM
+    // - HH:MM:SS AM/PM
+    // - HH:MM
+    // - HH:MM:SS
+    const timeRegex = /^(\d{1,2}):(\d{2})(?::(\d{2}))?\s?(AM|PM)?$/i;
+   
+    // Check if the time matches the expected format
+    const match = time.match(timeRegex);
+    if (!match) {
+       console.error('Invalid time format');
+       return time; // Return the original time if it doesn't match
+    }
+   
+    let hours = parseInt(match[1], 10);
+    const minutes = match[2];
+    const seconds = match[3] || '00';
+    const period = match[4] || '';
+   
+    // Convert hours to 24-hour format if period is specified
+    if (period) {
+       if (period.toUpperCase() === 'PM' && hours < 12) {
+         hours += 12;
+       } else if (period.toUpperCase() === 'AM' && hours === 12) {
+         hours = 0;
+       }
+    }
+   
+    // Ensure hours are two digits
+    hours = String(hours).padStart(2, '0');
+   
+    // Return the time in 24-hour format
+    return `${hours}:${minutes}:${seconds}`;
+   }
+   
  
  // Call this function when the page loads
  document.addEventListener('DOMContentLoaded', () => {
