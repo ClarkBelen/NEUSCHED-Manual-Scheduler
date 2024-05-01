@@ -125,20 +125,39 @@ const APP = {
     document.querySelector('#btnCancel').addEventListener('click', APP.clearInputField);
 
     document.querySelector('table tbody').addEventListener('click', (ev) => {
-      const rowIndex = ev.target.closest('tr').getAttribute('data-row');
-      row = rowIndex;
       if (APP.isEditing && (ev.target.id === 'edit' || ev.target.id === 'delete')) {
         alert("You are currently editing a schedule row. Please save it first!");
         document.getElementById('sCode').focus();
         return; // Prevent form submission
       } else {
-        if (ev.target.classList.contains('btn-info')||ev.target.classList.contains('glyphicon-edit')) {
+        if (ev.target.classList.contains('btn-info') || ev.target.classList.contains('glyphicon-edit')) {
+          // Handle edit button click
+          const rowIndex = ev.target.closest('tr').getAttribute('data-row');
           APP.editRow(rowIndex);
-        } else if (ev.target.classList.contains('btn-danger')||ev.target.classList.contains('glyphicon-trash')) {
+       } else if (ev.target.classList.contains('btn-danger') || ev.target.classList.contains('glyphicon-trash')) {
+          // Handle delete button click
+          const rowIndex = ev.target.closest('tr').getAttribute('data-row');
           APP.deleteRow(rowIndex);
-        }
-      }  
-    });
+       }
+      }
+     });
+     
+
+    // document.querySelector('table tbody').addEventListener('click', (ev) => {
+    //   const rowIndex = ev.target.closest('tr').getAttribute('data-row');
+    //   row = rowIndex;
+    //   if (APP.isEditing && (ev.target.id === 'edit' || ev.target.id === 'delete')) {
+    //     alert("You are currently editing a schedule row. Please save it first!");
+    //     document.getElementById('sCode').focus();
+    //     return; // Prevent form submission
+    //   } else {
+    //     if (ev.target.classList.contains('btn-info')||ev.target.classList.contains('glyphicon-edit')) {
+    //       APP.editRow(rowIndex);
+    //     } else if (ev.target.classList.contains('btn-danger')||ev.target.classList.contains('glyphicon-trash')) {
+    //       APP.deleteRow(rowIndex);
+    //     }
+    //   }  
+    // });
 
   },
   clearInputField() {
