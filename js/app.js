@@ -27,19 +27,20 @@ function getScheduleDataFromURL() {
   });
  }
  function addScheduleRow(scheduleData) {
-  // Get the table body element in which you want to add row
   let table = document.querySelector('#display > table > tbody');
- 
-  // Create row element
   let row = table.insertRow(-1); // Adding at the end
  
-  // Assuming the order of scheduleData properties matches the order of columns in the table
-  Object.values(scheduleData).forEach((value, index) => {
-     let cell = row.insertCell(index);
-     cell.textContent = value;
-  });
+  // Correctly assign data to columns
+  row.insertCell(0).textContent = scheduleData.subjectCode;
+  row.insertCell(1).textContent = scheduleData.subjectName;
+  row.insertCell(2).textContent = scheduleData.schedDay;
+  row.insertCell(3).textContent = scheduleData.startTime;
+  row.insertCell(4).textContent = scheduleData.endTime;
+  row.insertCell(5).textContent = scheduleData.subjectName + ' Class'; // Description column should be empty
+  row.insertCell(6).textContent = scheduleData.location;
+  row.insertCell(7).textContent = scheduleData.private;
  
-  // Add edit and delete buttons
+  // Add edit and delete buttons to the last column
   let actionCell = row.insertCell(-1);
   actionCell.innerHTML = `<span class="glyphicon glyphicon-edit btn btn-info btn-sm" style="margin:2px;" id="edit" data-toggle="tooltip" data-placement="top" title="Edit"></span>
   <span class="glyphicon glyphicon-trash btn btn-danger btn-sm" id="delete" data-toggle="tooltip" data-placement="top" title="Delete"></span>`;
@@ -137,9 +138,6 @@ const APP = {
       }  
     });
 
-    document
-      .getElementById('btnExport')
-      .addEventListener('click', APP.exportData);
   },
   clearInputField() {
     if(APP.isEditing){
