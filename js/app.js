@@ -34,8 +34,8 @@ function getScheduleDataFromURL() {
   row.insertCell(0).textContent = scheduleData.subjectCode;
   row.insertCell(1).textContent = scheduleData.subjectName;
   row.insertCell(2).textContent = scheduleData.schedDay;
-  row.insertCell(3).textContent = scheduleData.startTime;
-  row.insertCell(4).textContent = scheduleData.endTime;
+  row.insertCell(3).textContent = convertTo12HourFormat(scheduleData.startTime);
+  row.insertCell(4).textContent = convertTo12HourFormat(scheduleData.endTime);
   row.insertCell(5).textContent = scheduleData.subjectName + ' Class'; // Description column should be empty
   row.insertCell(6).textContent = scheduleData.location;
   row.insertCell(7).textContent = scheduleData.private;
@@ -91,6 +91,8 @@ function getScheduleDataFromURL() {
   const scheduleData = getScheduleDataFromURL();
   if (scheduleData) {
      populateAndSubmitForm(scheduleData);
+  } else{
+    APP.init();
   }
  });
 
@@ -291,4 +293,3 @@ const APP = {
    },   
 };
 
-document.addEventListener('DOMContentLoaded', APP.init);
