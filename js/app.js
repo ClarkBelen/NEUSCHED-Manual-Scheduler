@@ -17,6 +17,7 @@ function getScheduleDataFromURL() {
       schedDay: data.schedule.split(' ')[0], // Assuming 'schedule' is in the format 'Day StartTime-EndTime'
       startTime: convertTo24HourFormat(data.schedule.split(' ')[1].split('-')[0]),
       endTime: convertTo24HourFormat(data.schedule.split(' ')[1].split('-')[1]),
+      description: '',
       location: data.sectionRoom,
       private: 'TRUE'
     };
