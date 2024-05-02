@@ -35,17 +35,28 @@ function getScheduleDataFromURL() {
       private: 'TRUE'
     };
 
-    //  // Add the row to the table using the new function
-    //  addScheduleRow(rowData);
+    // Convert rowData to FormData for consistency with manual input
+    const formData = new FormData();
+    Object.keys(rowData).forEach(key => formData.append(key, rowData[key]));
 
-      // Cache the data in APP.data
-    APP.cacheData(new FormData(rowData));
-
-    const rowIndex = document.querySelectorAll('tbody tr').length - 1;
+    // Cache the data in APP.data
+    APP.cacheData(formData);
 
     // Build the row in the table
-    APP.buildRow(new FormData(rowData));
-  });
+    APP.buildRow(formData);
+ });
+
+  //   //  // Add the row to the table using the new function
+  //   //  addScheduleRow(rowData);
+
+  //     // Cache the data in APP.data
+  //   APP.cacheData(new FormData(rowData));
+
+  //   const rowIndex = document.querySelectorAll('tbody tr').length - 1;
+
+  //   // Build the row in the table
+  //   APP.buildRow(new FormData(rowData));
+  // });
  }
  function addScheduleRow(scheduleData) {
   let table = document.querySelector('#display > table > tbody');
