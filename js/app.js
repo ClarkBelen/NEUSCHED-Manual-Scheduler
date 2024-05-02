@@ -26,35 +26,37 @@ function getScheduleDataFromURL() {
      // Split the schedule string into individual entries
      const scheduleEntries = data.schedule.split(',');
  
-     scheduleEntries.forEach(entry => {
-       // Extract day and time from each entry
-       const [day, time] = entry.trim().split(' ');
-       const [startTime, endTime] = time.split('-');
+     // Extract days from the first entry (assuming all entries have the same time)
+     const days = scheduleEntries.map(entry => entry.trim().split(' ')[0]).join(', ');
  
-       // Prepare the data for the table row
-       const rowData = {
-         subjectCode: data.subjectCode,
-         subjectName: data.subjectName,
-         schedDay: day, // Use the extracted day
-         startTime: convertTo24HourFormat(startTime),
-         endTime: convertTo24HourFormat(endTime),
-         description: data.subjectName + ' Class',
-         location: data.sectionRoom,
-         private: 'TRUE'
-       };
+     // Extract the time from the first entry (assuming all entries have the same time)
+     const [_, time] = scheduleEntries[0].trim().split(' ');
+     const [startTime, endTime] = time.split('-');
  
-       // Convert rowData to FormData for consistency with manual input
-       const formData = new FormData();
-       Object.keys(rowData).forEach(key => formData.append(key, rowData[key]));
+     // Prepare the data for the table row
+     const rowData = {
+       subjectCode: data.subjectCode,
+       subjectName: data.subjectName,
+       schedDay: days, // Use the extracted days joined as a string
+       startTime: convertTo24HourFormat(startTime),
+       endTime: convertTo24HourFormat(endTime),
+       description: data.subjectName + ' Class',
+       location: data.sectionRoom,
+       private: 'TRUE'
+     };
  
-       // Cache the data in APP.data
-       APP.cacheData(formData);
+     // Convert rowData to FormData for consistency with manual input
+     const formData = new FormData();
+     Object.keys(rowData).forEach(key => formData.append(key, rowData[key]));
  
-       // Build the row in the table
-       APP.buildRow(formData);
-     });
+     // Cache the data in APP.data
+     APP.cacheData(formData);
+ 
+     // Build the row in the table
+     APP.buildRow(formData);
   });
  }
+ 
  
  function addScheduleRow(scheduleData) {
   let table = document.querySelector('#display > table > tbody');
