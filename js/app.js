@@ -58,27 +58,6 @@ function getScheduleDataFromURL() {
  }
  
  
- function addScheduleRow(scheduleData) {
-  let table = document.querySelector('#display > table > tbody');
-  let row = table.insertRow(-1); // Adding at the end
- 
-  // Correctly assign data to columns
-  row.insertCell(0).textContent = scheduleData.subjectCode;
-  row.insertCell(1).textContent = scheduleData.subjectName;
-  row.insertCell(2).textContent = scheduleData.schedDay;
-  row.insertCell(3).textContent = convertTo12HourFormat(scheduleData.startTime);
-  row.insertCell(4).textContent = convertTo12HourFormat(scheduleData.endTime);
-  row.insertCell(5).textContent = scheduleData.description; // Description column should be empty
-  row.insertCell(6).textContent = scheduleData.location;
-  row.insertCell(7).textContent = scheduleData.private;
- 
-  // Add edit and delete buttons to the last column
-  let actionCell = row.insertCell(-1);
-  actionCell.innerHTML = `<span class="glyphicon glyphicon-edit btn btn-info btn-sm" style="margin:2px;" id="edit" data-toggle="tooltip" data-placement="top" title="Edit"></span>
-  <span class="glyphicon glyphicon-trash btn btn-danger btn-sm" id="delete" data-toggle="tooltip" data-placement="top" title="Delete"></span>`;
- }
- 
- 
  // Convert time to 24-hour format if necessary
  function convertTo24HourFormat(time) {
     // Regular expression to match time formats
@@ -268,11 +247,12 @@ const APP = {
     document.getElementById('sCode').value = data[0];
     document.getElementById('sName').value = data[1];
    
-    // Handle checkboxes
-    const days = data[2].split(','); // Assuming the days are stored as a comma-separated string
-    document.querySelectorAll('#schedDays input[type="checkbox"]').forEach(checkbox => {
-       checkbox.checked = days.includes(checkbox.nextElementSibling.textContent.trim());
-    });
+ // Handle checkboxes for days
+  const days = data[2].split(',').map(day => day.trim()); // Split and trim the days string
+  document.querySelectorAll('#schedDays input[type="checkbox"]').forEach(checkbox => {
+      const dayLabel = checkbox.nextElementSibling.textContent.trim();
+      checkbox.checked = days.includes(dayLabel); // Check if the day is in the days array
+  });
    
     // Handle other inputs similarly
     document.getElementById('startTime').value = data[3];
