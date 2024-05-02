@@ -35,14 +35,14 @@ function getScheduleDataFromURL() {
  
      // Prepare the data for the table row
      const rowData = {
-       subjectCode: data.subjectCode,
-       subjectName: data.subjectName,
+       sCode: data.subjectCode,
+       sName: data.subjectName,
        schedDay: days, // Use the extracted days joined as a string
        startTime: convertTo24HourFormat(startTime),
        endTime: convertTo24HourFormat(endTime),
        description: data.subjectName + ' Class',
        location: data.sectionRoom,
-       private: 'TRUE'
+       isPrivate: 'TRUE'
      };
  
      // Convert rowData to FormData for consistency with manual input
