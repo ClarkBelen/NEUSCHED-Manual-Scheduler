@@ -23,41 +23,39 @@ function getScheduleDataFromURL() {
  function populateAndSubmitForm(scheduleData) {
   // Assuming scheduleData is an array of objects
   scheduleData.forEach(data => {
-     // Prepare the data for the table row
-    const rowData = {
-      subjectCode: data.subjectCode,
-      subjectName: data.subjectName,
-      schedDay: data.schedule.split(' ')[0], // Assuming 'schedule' is in the format 'Day StartTime-EndTime'
-      startTime: convertTo24HourFormat(data.schedule.split(' ')[1].split('-')[0]),
-      endTime: convertTo24HourFormat(data.schedule.split(' ')[1].split('-')[1]),
-      description: data.subjectName + ' Class',
-      location: data.sectionRoom,
-      private: 'TRUE'
-    };
-
-    // Convert rowData to FormData for consistency with manual input
-    const formData = new FormData();
-    Object.keys(rowData).forEach(key => formData.append(key, rowData[key]));
-
-    // Cache the data in APP.data
-    APP.cacheData(formData);
-
-    // Build the row in the table
-    APP.buildRow(formData);
- });
-
-  //   //  // Add the row to the table using the new function
-  //   //  addScheduleRow(rowData);
-
-  //     // Cache the data in APP.data
-  //   APP.cacheData(new FormData(rowData));
-
-  //   const rowIndex = document.querySelectorAll('tbody tr').length - 1;
-
-  //   // Build the row in the table
-  //   APP.buildRow(new FormData(rowData));
-  // });
+     // Split the schedule string into individual entries
+     const scheduleEntries = data.schedule.split(',');
+ 
+     scheduleEntries.forEach(entry => {
+       // Extract day and time from each entry
+       const [day, time] = entry.trim().split(' ');
+       const [startTime, endTime] = time.split('-');
+ 
+       // Prepare the data for the table row
+       const rowData = {
+         subjectCode: data.subjectCode,
+         subjectName: data.subjectName,
+         schedDay: day, // Use the extracted day
+         startTime: convertTo24HourFormat(startTime),
+         endTime: convertTo24HourFormat(endTime),
+         description: data.subjectName + ' Class',
+         location: data.sectionRoom,
+         private: 'TRUE'
+       };
+ 
+       // Convert rowData to FormData for consistency with manual input
+       const formData = new FormData();
+       Object.keys(rowData).forEach(key => formData.append(key, rowData[key]));
+ 
+       // Cache the data in APP.data
+       APP.cacheData(formData);
+ 
+       // Build the row in the table
+       APP.buildRow(formData);
+     });
+  });
  }
+ 
  function addScheduleRow(scheduleData) {
   let table = document.querySelector('#display > table > tbody');
   let row = table.insertRow(-1); // Adding at the end
