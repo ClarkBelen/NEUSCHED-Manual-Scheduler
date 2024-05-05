@@ -125,23 +125,30 @@ const APP = {
     const form = document.querySelector('#collect form');
     form.addEventListener('submit', APP.saveData);
 
-    document.querySelector('#btnCancel').addEventListener('click', APP.clearInputField);
-
     document.querySelector('table tbody').addEventListener('click', (ev) => {
-      const rowIndex = ev.target.closest('tr').getAttribute('data-row');
-      row = rowIndex;
-      if (APP.isEditing && (ev.target.id === 'edit' || ev.target.id === 'delete')) {
-        alert("You are currently editing a schedule row. Please save it first!");
-        document.getElementById('sCode').focus();
-        return; // Prevent form submission
-      } else {
-        if (ev.target.classList.contains('btn-info')||ev.target.classList.contains('glyphicon-edit')) {
+      const rowIndex = +ev.target.closest('tr').getAttribute('data-row');
+      if (ev.target.classList.contains('btn-info')||ev.target.classList.contains('glyphicon-edit')) {
+        if (APP.isEditing) {
+          alert("You are currently editing a schedule row. Please save it first!");
+          document.getElementById('sCode').focus();
+          return; // Prevent form submission
+        }else{
           APP.editRow(rowIndex);
-        } else if (ev.target.classList.contains('btn-danger')||ev.target.classList.contains('glyphicon-trash')) {
-          APP.deleteRow(rowIndex);
+          row = rowIndex;
         }
-      }  
+      } else if (ev.target.classList.contains('btn-danger')||ev.target.classList.contains('glyphicon-trash')) {
+        if (APP.isEditing) {
+          alert("You are currently editing a schedule row. Please save it first!");
+          document.getElementById('sCode').focus();
+          return; // Prevent form submission
+        }else{
+          APP.deleteRow(rowIndex);
+          
+        }      
+      }
     });
+
+    document.querySelector('#btnCancel').addEventListener('click', APP.clearInputField);
 
   },
   clearInputField() {
@@ -210,9 +217,21 @@ const APP = {
     //focus on first field
     document.getElementById('sCode').focus();
   },
-  cacheData(formdata) {
-    //extract the data from the FormData object and update APP.data
-    APP.data.push(Array.from(formdata.values()));
+  // Updated cacheData function
+  cacheData(formdata, rowIndex) {
+    // Create a structured object that includes the form data and the row index
+    const data = {
+      index: rowIndex,
+      values: Array.from(formdata.values())
+    };
+  
+    // If rowIndex is provided, update the existing data; otherwise, add new data
+    if (rowIndex !== undefined) {
+      APP.data[rowIndex] = data;
+    } else {
+      APP.data.push(data);
+    }
+  
     console.table(APP.data);
   },
   buildRow(formdata) {
@@ -239,7 +258,7 @@ const APP = {
     APP.isEditing = true; // Set the flag to indicate an edit operation
     APP.editingRowIndex = rowIndex; // Store the row index being edited
     const row = document.querySelector(`tbody tr[data-row="${rowIndex}"]`);
-    const data = APP.data[rowIndex];
+    const data = APP.data[rowIndex].values;
    
     row.classList.add('bg-info');
 
@@ -247,12 +266,12 @@ const APP = {
     document.getElementById('sCode').value = data[0];
     document.getElementById('sName').value = data[1];
    
- // Handle checkboxes for days
-  const days = data[2].split(',').map(day => day.trim()); // Split and trim the days string
-  document.querySelectorAll('#schedDays input[type="checkbox"]').forEach(checkbox => {
-      const dayLabel = checkbox.nextElementSibling.textContent.trim();
-      checkbox.checked = days.includes(dayLabel); // Check if the day is in the days array
-  });
+  // Handle checkboxes for days
+    const days = data[2].split(',').map(day => day.trim()); // Split and trim the days string
+    document.querySelectorAll('#schedDays input[type="checkbox"]').forEach(checkbox => {
+        const dayLabel = checkbox.nextElementSibling.textContent.trim();
+        checkbox.checked = days.includes(dayLabel); // Check if the day is in the days array
+    });
    
     // Handle other inputs similarly
     document.getElementById('startTime').value = data[3];
@@ -271,7 +290,7 @@ const APP = {
   },
   updateRow(formdata, rowIndex) {
      // Update the existing row in APP.data
-     APP.data[rowIndex] = Array.from(formdata.values());
+     APP.data[rowIndex].values = Array.from(formdata.values());
      // Update the row in the table
      const row = document.querySelector(`tbody tr[data-row="${rowIndex}"]`);
      row.innerHTML = ''; // Clear the row
@@ -294,6 +313,12 @@ const APP = {
     const row = document.querySelector(`tbody tr[data-row="${rowIndex}"]`);
     tbody.removeChild(row);
     APP.data.splice(rowIndex, 1); // Remove the row data from APP.data
+
+        // Update the data-row attributes of all rows that come after the deleted row
+    document.querySelectorAll('tbody tr').forEach((tr, index) => {
+      tr.setAttribute('data-row', index);
+    });
+
     console.table(APP.data);
    },   
 };
