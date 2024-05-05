@@ -3,13 +3,12 @@ function initializeApp() {
   // Initialize APP object
   APP.init();
 
-  // Get schedule data from URL and populate form if available
+  // Get schedule data from URL and populate form
   const scheduleData = getScheduleDataFromURL();
   if (scheduleData) {
     populateAndSubmitForm(scheduleData);
   }
 }
-
 
 function getScheduleDataFromURL() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -57,7 +56,6 @@ function getScheduleDataFromURL() {
     });
   }
  
- 
  // Convert time to 24-hour format if necessary
  function convertTo24HourFormat(time) {
     // Regular expression to match time formats
@@ -96,9 +94,6 @@ function getScheduleDataFromURL() {
     return `${hours}:${minutes}:${seconds}`;
    }
    
- 
-
-
 function convertTo12HourFormat(time) {
   let [hours, minutes] = time.split(':');
   let period = 'AM';
