@@ -154,6 +154,10 @@ const APP = {
     }else{
         document.getElementById('manual-form').reset();
     }
+
+      setTimeout(function() {
+        document.getElementById('sCode').focus();
+    }, 0); // 0 milliseconds delay
   },
   saveData(ev) {
     ev.preventDefault();
