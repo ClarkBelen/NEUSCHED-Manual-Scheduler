@@ -21,41 +21,41 @@ function getScheduleDataFromURL() {
  }
 
  function populateAndSubmitForm(scheduleData) {
-  // Assuming scheduleData is an array of objects
-  scheduleData.forEach(data => {
-     // Split the schedule string into individual entries
-     const scheduleEntries = data.schedule.split(',');
- 
-     // Extract days from the first entry (assuming all entries have the same time)
-     const days = scheduleEntries.map(entry => entry.trim().split(' ')[0]).join(', ');
- 
-     // Extract the time from the first entry (assuming all entries have the same time)
-     const [_, time] = scheduleEntries[0].trim().split(' ');
-     const [startTime, endTime] = time.split('-');
- 
-     // Prepare the data for the table row
-     const rowData = {
-       sCode: data.subjectCode,
-       sName: data.subjectName,
-       schedDay: days, // Use the extracted days joined as a string
-       startTime: convertTo24HourFormat(startTime),
-       endTime: convertTo24HourFormat(endTime),
-       description: data.subjectName + ' Class',
-       location: data.sectionRoom,
-       isPrivate: 'TRUE'
-     };
- 
-     // Convert rowData to FormData for consistency with manual input
-     const formData = new FormData();
-     Object.keys(rowData).forEach(key => formData.append(key, rowData[key]));
- 
-     // Cache the data in APP.data
-     APP.cacheData(formData);
- 
-     // Build the row in the table
-     APP.buildRow(formData);
-  });
- }
+    // Assuming scheduleData is an array of objects
+    scheduleData.forEach(data => {
+      // Split the schedule string into individual entries
+      const scheduleEntries = data.schedule.split(',');
+  
+      // Extract days from the first entry (assuming all entries have the same time)
+      const days = scheduleEntries.map(entry => entry.trim().split(' ')[0]).join(', ');
+  
+      // Extract the time from the first entry (assuming all entries have the same time)
+      const [_, time] = scheduleEntries[0].trim().split(' ');
+      const [startTime, endTime] = time.split('-');
+  
+      // Prepare the data for the table row
+      const rowData = {
+        sCode: data.subjectCode,
+        sName: data.subjectName,
+        schedDay: days, // Use the extracted days joined as a string
+        startTime: convertTo24HourFormat(startTime),
+        endTime: convertTo24HourFormat(endTime),
+        description: data.subjectName + ' Class',
+        location: data.sectionRoom,
+        isPrivate: 'TRUE'
+      };
+  
+      // Convert rowData to FormData for consistency with manual input
+      const formData = new FormData();
+      Object.keys(rowData).forEach(key => formData.append(key, rowData[key]));
+  
+      // Cache the data in APP.data
+      APP.cacheData(formData);
+  
+      // Build the row in the table
+      APP.buildRow(formData);
+    });
+  }
  
  
  // Convert time to 24-hour format if necessary
@@ -294,6 +294,7 @@ const APP = {
     const row = document.querySelector(`tbody tr[data-row="${rowIndex}"]`);
     tbody.removeChild(row);
     APP.data.splice(rowIndex, 1); // Remove the row data from APP.data
+    console.table(APP.data);
    },   
 };
 
