@@ -31,6 +31,15 @@ function getScheduleDataFromURL() {
       // Extract the time from the first entry (assuming all entries have the same time)
       const [_, time] = scheduleEntries[0].trim().split(' ');
       const [startTime, endTime] = time.split('-');
+
+      let end = endTime;
+      let endAMPM = end
+        .replace(/AM|PM/g, function (match) {
+          return " " + match + " ";
+        })
+        .replace(/\(.*?\)/g, "")
+        .trim();
+      console.log(endAMPM);
   
       // Prepare the data for the table row
       const rowData = {
@@ -38,7 +47,7 @@ function getScheduleDataFromURL() {
         sName: data.subjectName,
         schedDay: days, // Use the extracted days joined as a string
         startTime: convertTo24HourFormat(startTime),
-        endTime: convertTo24HourFormat(endTime),
+        endTime: convertTo24HourFormat(endAMPM),
         description: data.subjectName + ' Class',
         location: data.sectionRoom,
         isPrivate: 'TRUE'
